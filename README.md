@@ -2,20 +2,22 @@
 
 > 431 首循环播放的私藏，按风格收好。
 
-![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-online-7c5cff?style=flat-square)
-![Songs](https://img.shields.io/badge/songs-431-00e5c3?style=flat-square)
-![Genres](https://img.shields.io/badge/genres-8-ff4ecd?style=flat-square)
-![Vanilla JS](https://img.shields.io/badge/vanilla-JS-f7df1e?style=flat-square)
+![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-online-b8442e?style=flat-square)
+![Songs](https://img.shields.io/badge/songs-431-12110f?style=flat-square)
+![Genres](https://img.shields.io/badge/genres-8-12110f?style=flat-square)
+![Vanilla JS](https://img.shields.io/badge/vanilla-JS-12110f?style=flat-square)
 
 **在线访问：<https://tuxlin123233.github.io/my-play-list/>**
 
+> 私人唱片档案 · 431 首 · 8 种风格。深色黑胶与浅色纸白两套主题，无渐变。
+
 <p align="center">
-  <img src="docs/preview-dark.jpg" alt="深色主题桌面预览" width="100%">
+  <img src="docs/preview-dark.jpg" alt="深色黑胶主题桌面预览" width="100%">
 </p>
 
 ## 关于
 
-这是把个人歌单做成的一个静态展示网站。原始歌单 437 条收藏，去重后得到 431 首歌；按风格重新分类，并为每首歌准备了专辑封面、时长和音乐平台入口。
+这是把个人歌单做成的一本静态「私人唱片档案」。原始歌单 437 条收藏，去重后得到 431 首歌；按风格重新分类，并为每首歌准备了专辑封面、时长和音乐平台入口。界面走黑胶杂志 / 私人档案感：暖纸与炭黑两套主题、衬线标题、mono 编号、细线分隔，没有渐变和光晕。
 
 整个网站没有后端，也不依赖前端框架，所有数据在构建时生成，直接部署在 GitHub Pages。
 
@@ -26,14 +28,16 @@
 - 按风格筛选，按歌名 / 艺术家 / 专辑 / 时长排序
 - 网格 / 列表两种视图
 - 随机一首，打开歌曲详情
-- 深色霓虹 / 浅色两种主题，自动记住选择
+- 深色黑胶 / 浅色纸白两套主题，自动记住选择
+- 无渐变、扁平、杂志感的编辑排版
 - 一键跳转 QQ 音乐 / 网易云音乐搜索
 - 手机端适配，封面懒加载
+- 「其它网站」入口：重力 2048、一事一练、像素画网站与 GitHub
 
 ## 界面预览
 
 <p align="center">
-  <img src="docs/preview-light.jpg" alt="浅色主题列表视图" width="72%">
+  <img src="docs/preview-light.jpg" alt="浅色纸白列表视图" width="72%">
   <img src="docs/preview-mobile.jpg" alt="手机端预览" width="22%">
 </p>
 
@@ -53,6 +57,13 @@
 | 纯音乐 | 4 |
 | 民谣 / 唱作 | 3 |
 | 爵士 / 蓝调 | 1 |
+
+## 其它网站
+
+- [重力 2048](https://tuxlin123233.github.io/)：一个受重力影响的 2048 小游戏
+- [一事一练](https://tuxlin123233.github.io/json-prompt-form/)：AI 长期陪练与存档
+- [像素画网站](https://pixel-space-9bn.pages.dev/)：我的像素画作品
+- [GitHub](https://github.com/TuxLin123233)：其它开源项目
 
 ## 技术栈
 

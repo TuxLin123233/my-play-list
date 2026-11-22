@@ -31,6 +31,7 @@
     sort: "default",
     view: localStorage.getItem("playlist-view") === "list" ? "list" : "grid",
     theme: localStorage.getItem("playlist-theme") === "light" ? "light" : "dark",
+    heroId: null,
   };
 
   const els = {
@@ -62,6 +63,16 @@
     year: $("#year"),
     heroCount: $("#hero-count"),
     vinylCount: $("#vinyl-count"),
+    heroCover: $("#hero-cover"),
+    heroTitle: $("#hero-title"),
+    heroArtist: $("#hero-artist"),
+    heroGenre: $("#hero-genre"),
+    heroCatalog: $("#hero-catalog"),
+    heroCoverBtn: $("#hero-cover-btn"),
+    spin: $("#spin"),
+    elsewhereDialog: $("#elsewhere-dialog"),
+    elsewhereOpen: $$("[data-elsewhere]"),
+    elsewhereClose: $("#elsewhere-close"),
   };
 
   const collator = new Intl.Collator("zh-CN", { sensitivity: "base", numeric: true });
@@ -80,7 +91,7 @@
       els.themeToggle.setAttribute("aria-label", label);
       els.themeToggle.title = label;
     }
-    if (els.metaTheme) els.metaTheme.setAttribute("content", isDark ? "#07070b" : "#f4f1ff");
+    if (els.metaTheme) els.metaTheme.setAttribute("content", isDark ? "#12110f" : "#f5f3ee");
     if (persist) localStorage.setItem("playlist-theme", theme);
   }
 
@@ -151,24 +162,41 @@
       <article class="song-card" data-id="${esc(song.id)}" tabindex="0" role="button"
         aria-label="查看 ${esc(song.title)} 详情" style="--i:${index % 14}">
         <div class="song-card__cover">
-          <img src="${esc(cover)}" alt="${esc(song.title)} - ${esc(song.artist)}"
-            loading="lazy" decoding="async" data-fallback="${esc(fallback)}">
-          <span class="song-card__genre">${esc(song.genre)}</span>
-          <span class="song-card__play" aria-hidden="true">♪</span>
+          ${cover ? `<img src="${esc(cover)}" alt="${esc(song.title)} - ${esc(song.artist)}"
+            loading="lazy" decoding="async" data-fallback="${esc(fallback)}">` : ""}
+          <span class="song-card__index">${String(index + 1).padStart(3, "0")}</span>
+          <span class="song-card__play" aria-hidden="true">↗</span>
         </div>
         <div class="song-card__body">
           <h3 class="song-card__title">${esc(song.title)}</h3>
           <p class="song-card__artist">${esc(song.artist)}</p>
           ${album}
           <div class="song-card__meta">${genreInline}${language}${duration}</div>
-          <div class="song-card__actions">
-            <a class="mini-btn" data-action="qq" href="${esc(song.qqUrl)}" target="_blank" rel="noopener"
-              aria-label="在 QQ 音乐搜索 ${esc(song.title)}">QQ 音乐</a>
-            <a class="mini-btn" data-action="netease" href="${esc(song.neteaseUrl)}" target="_blank" rel="noopener"
-              aria-label="在网易云音乐搜索 ${esc(song.title)}">网易云</a>
-          </div>
         </div>
       </article>`;
+  }
+
+  function setHeroShowcase(song) {
+    if (!song || !els.heroCover) return;
+    state.heroId = song.id;
+    const cover = song.cover || song.coverRemote || "";
+    els.heroCover.src = cover;
+    els.heroCover.alt = `${song.title} - ${song.artist}`;
+    els.heroCover.dataset.fallback =
+      song.coverRemote && song.coverRemote !== cover ? song.coverRemote : "";
+    els.heroTitle.textContent = song.title;
+    els.heroArtist.textContent = song.artist;
+    els.heroGenre.textContent = song.genre;
+    els.heroCatalog.textContent = "NO. " + String(song.id).padStart(3, "0");
+    if (els.heroCoverBtn) {
+      els.heroCoverBtn.setAttribute("aria-label", `查看 ${song.title} 详情`);
+    }
+  }
+
+  function spinShowcase() {
+    if (!DATA.songs.length) return;
+    const song = DATA.songs[Math.floor(Math.random() * DATA.songs.length)];
+    setHeroShowcase(song);
   }
 
   function render() {
@@ -393,6 +421,21 @@
     });
 
     els.dialogClose.addEventListener("click", closeDialog);
+    els.elsewhereOpen.forEach((button) => {
+      button.addEventListener("click", () => {
+        if (els.elsewhereDialog && !els.elsewhereDialog.open) els.elsewhereDialog.showModal();
+      });
+    });
+    if (els.elsewhereClose) {
+      els.elsewhereClose.addEventListener("click", () => {
+        if (els.elsewhereDialog && els.elsewhereDialog.open) els.elsewhereDialog.close();
+      });
+    }
+    if (els.elsewhereDialog) {
+      els.elsewhereDialog.addEventListener("click", (event) => {
+        if (event.target === els.elsewhereDialog) els.elsewhereDialog.close();
+      });
+    }
     els.dialog.addEventListener("click", (event) => {
       if (event.target === els.dialog) closeDialog();
     });
@@ -400,14 +443,24 @@
       document.body.classList.remove("dialog-open");
     });
 
-    els.shuffle.addEventListener("click", () => {
-      const pool = getFiltered();
-      if (!pool.length) {
-        toast("当前筛选下没有歌曲");
-        return;
-      }
-      openDialog(pool[Math.floor(Math.random() * pool.length)].id);
-    });
+    els.shuffle.addEventListener("click", spinShowcase);
+    if (els.spin) els.spin.addEventListener("click", spinShowcase);
+    if (els.heroCoverBtn) {
+      els.heroCoverBtn.addEventListener("click", () => {
+        if (state.heroId) openDialog(state.heroId);
+      });
+    }
+    if (els.heroCover) {
+      els.heroCover.addEventListener("error", () => {
+        const fallback = els.heroCover.dataset.fallback;
+        if (fallback && els.heroCover.dataset.triedFallback !== "1") {
+          els.heroCover.dataset.triedFallback = "1";
+          els.heroCover.src = fallback;
+        } else {
+          els.heroCover.style.visibility = "hidden";
+        }
+      });
+    }
 
     els.emptyReset.addEventListener("click", () => {
       state.genre = "all";
@@ -461,6 +514,7 @@
   initStats();
   bindEvents();
   render();
+  spinShowcase();
 
   if (els.year) els.year.textContent = new Date().getFullYear();
 })();
