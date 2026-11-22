@@ -23,7 +23,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 CSV_PATH = ROOT / "data" / "playlist.csv"
 if not CSV_PATH.exists():
-    CSV_PATH = Path("/home/tux/Downloads/lx_list_小林要自律喜欢的音乐.csv")
+    candidates = sorted(Path("/home/tux/Downloads").glob("lx_list_*.csv"))
+    if candidates:
+        CSV_PATH = candidates[-1]
 CACHE_PATH = ROOT / "data" / "metadata_cache.json"
 OUT_PATH = ROOT / "data" / "songs_raw.json"
 WORKERS = 6

@@ -29,7 +29,9 @@ except ImportError:  # pragma: no cover
 ROOT = Path(__file__).resolve().parent.parent
 CSV_PATH = ROOT / "data" / "playlist.csv"
 if not CSV_PATH.exists():
-    CSV_PATH = Path("/home/tux/Downloads/lx_list_小林要自律喜欢的音乐.csv")
+    candidates = sorted(Path("/home/tux/Downloads").glob("lx_list_*.csv"))
+    if candidates:
+        CSV_PATH = candidates[-1]
 RAW_PATH = ROOT / "data" / "songs_raw.json"
 KUWO_PATH = ROOT / "data" / "kuwo_songs.json"
 OUT_JSON = ROOT / "data" / "songs.json"
@@ -245,7 +247,7 @@ def build_songs():
     artists = {song["artist"] for song in songs if song["artist"]}
     albums = {song["album"] for song in songs if song["album"]}
     data = {
-        "title": "小林要自律喜欢的音乐",
+        "title": "LinSifan 喜欢的音乐",
         "owner": "TuxLin123233",
         "updated": "2026-11-22",
         "songs": songs,
