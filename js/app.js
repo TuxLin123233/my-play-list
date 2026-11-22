@@ -10,6 +10,28 @@
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
 
+
+  document.documentElement.classList.add("js");
+
+  const revealObserver = "IntersectionObserver" in window
+    ? new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          revealObserver.unobserve(entry.target);
+        });
+      }, { threshold: 0.06, rootMargin: "0px 0px -36px 0px" })
+    : null;
+
+  function observeReveals(root = document) {
+    const nodes = root.querySelectorAll("[data-reveal]:not(.is-visible)");
+    if (!revealObserver) {
+      nodes.forEach((node) => node.classList.add("is-visible"));
+      return;
+    }
+    nodes.forEach((node) => revealObserver.observe(node));
+  }
+
   const ESC_MAP = {
     "&": "&amp;",
     "<": "&lt;",
@@ -160,7 +182,7 @@
 
     return `
       <article class="song-card" data-id="${esc(song.id)}" tabindex="0" role="button"
-        aria-label="查看 ${esc(song.title)} 详情" style="--i:${index % 14}">
+        data-reveal aria-label="查看 ${esc(song.title)} 详情" style="--i:${index % 14}">
         <div class="song-card__cover">
           ${cover ? `<img src="${esc(cover)}" alt="${esc(song.title)} - ${esc(song.artist)}"
             loading="lazy" decoding="async" data-fallback="${esc(fallback)}">` : ""}
@@ -191,6 +213,14 @@
     if (els.heroCoverBtn) {
       els.heroCoverBtn.setAttribute("aria-label", `查看 ${song.title} 详情`);
     }
+    const now = document.querySelector(".now");
+    if (now) {
+      now.classList.remove("is-spinning");
+      void now.offsetWidth;
+      now.classList.add("is-spinning");
+      clearTimeout(now._spinTimer);
+      now._spinTimer = setTimeout(() => now.classList.remove("is-spinning"), 700);
+    }
   }
 
   function spinShowcase() {
@@ -204,6 +234,7 @@
     els.grid.innerHTML = list.map(cardHTML).join("");
     els.empty.hidden = list.length > 0;
     updateResultCount(list.length);
+    observeReveals(els.grid);
 
     if (state.genre !== "all") {
       const active = $(`.chip[data-genre="${cssEscape(state.genre)}"]`, els.genreChips);
@@ -515,6 +546,7 @@
   bindEvents();
   render();
   spinShowcase();
+  observeReveals(document);
 
   if (els.year) els.year.textContent = new Date().getFullYear();
 })();
