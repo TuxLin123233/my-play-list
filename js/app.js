@@ -54,6 +54,7 @@
     view: localStorage.getItem("playlist-view") === "list" ? "list" : "grid",
     theme: localStorage.getItem("playlist-theme") === "light" ? "light" : "dark",
     heroId: null,
+    dialogId: null,
   };
 
   const els = {
@@ -81,8 +82,10 @@
     dialogTags: $("#dialog-tags"),
     dialogQQ: $("#dialog-qq"),
     dialogNetease: $("#dialog-netease"),
+    dialogShare: $("#dialog-share"),
     toast: $("#toast"),
     year: $("#year"),
+    updated: $("#updated"),
     heroCount: $("#hero-count"),
     vinylCount: $("#vinyl-count"),
     heroCover: $("#hero-cover"),
@@ -98,6 +101,7 @@
   };
 
   const collator = new Intl.Collator("zh-CN", { sensitivity: "base", numeric: true });
+  const BASE_TITLE = document.title;
   let searchTimer = 0;
   let toastTimer = 0;
 
@@ -274,6 +278,54 @@
     return String(value).replace(/["\\]/g, "\\$&");
   }
 
+  /* ---------- share ---------- */
+
+  function fallbackCopy(text) {
+    const area = document.createElement("textarea");
+    area.value = text;
+    area.setAttribute("readonly", "");
+    area.style.position = "fixed";
+    area.style.opacity = "0";
+    document.body.appendChild(area);
+    area.select();
+    try {
+      document.execCommand("copy");
+    } finally {
+      area.remove();
+    }
+  }
+
+  async function shareSong() {
+    const song = DATA.songs.find((item) => item.id === state.dialogId);
+    if (!song) return;
+    const url = new URL(window.location.href);
+    url.searchParams.set("song", song.id);
+    url.hash = "";
+    const shareData = {
+      title: `${song.title} · LinSifan 喜欢的音乐`,
+      text: `${song.title} — ${song.artist}`,
+      url: url.href,
+    };
+
+    const isTouch = window.matchMedia("(pointer: coarse)").matches;
+    if (isTouch && typeof navigator.share === "function") {
+      try {
+        await navigator.share(shareData);
+        return;
+      } catch (error) {
+        if (error && error.name === "AbortError") return;
+      }
+    }
+
+    // 先给即时反馈，再异步写剪贴板；避免无焦点环境下 Promise 一直不返回。
+    toast("单曲链接已复制");
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(url.href).catch(() => fallbackCopy(url.href));
+    } else {
+      fallbackCopy(url.href);
+    }
+  }
+
   /* ---------- dialog ---------- */
 
   function openDialog(id) {
@@ -297,6 +349,12 @@
     els.dialogCover.dataset.fallback = song.coverRemote || "";
     els.dialogCover.src = song.cover || song.coverRemote || "";
     els.dialogCover.alt = `${song.title} - ${song.artist}`;
+
+    state.dialogId = song.id;
+    document.title = `${song.title} · ${song.artist} — LinSifan`;
+    const url = new URL(window.location.href);
+    url.searchParams.set("song", song.id);
+    window.history.replaceState(null, "", url);
 
     if (!els.dialog.open) els.dialog.showModal();
     document.body.classList.add("dialog-open");
@@ -452,6 +510,7 @@
     });
 
     els.dialogClose.addEventListener("click", closeDialog);
+    if (els.dialogShare) els.dialogShare.addEventListener("click", shareSong);
     els.elsewhereOpen.forEach((button) => {
       button.addEventListener("click", () => {
         if (els.elsewhereDialog && !els.elsewhereDialog.open) els.elsewhereDialog.showModal();
@@ -472,6 +531,13 @@
     });
     els.dialog.addEventListener("close", () => {
       document.body.classList.remove("dialog-open");
+      document.title = BASE_TITLE;
+      state.dialogId = null;
+      const url = new URL(window.location.href);
+      if (url.searchParams.has("song")) {
+        url.searchParams.delete("song");
+        window.history.replaceState(null, "", url);
+      }
     });
 
     els.shuffle.addEventListener("click", spinShowcase);
@@ -549,4 +615,10 @@
   observeReveals(document);
 
   if (els.year) els.year.textContent = new Date().getFullYear();
+  if (els.updated && DATA.updated) {
+    els.updated.textContent = String(DATA.updated).replace(/-/g, ".");
+  }
+
+  const initialSong = new URLSearchParams(window.location.search).get("song");
+  if (initialSong) openDialog(initialSong);
 })();
