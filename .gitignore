@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# generated caches
+/data/metadata_cache.json
+/metadata_cache.json
+/songs_raw.json

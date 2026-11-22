@@ -1,0 +1,126 @@
+# 小林要自律喜欢的音乐
+
+> 431 首循环播放的私藏，按风格收好。
+
+![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-online-7c5cff?style=flat-square)
+![Songs](https://img.shields.io/badge/songs-431-00e5c3?style=flat-square)
+![Genres](https://img.shields.io/badge/genres-8-ff4ecd?style=flat-square)
+![Vanilla JS](https://img.shields.io/badge/vanilla-JS-f7df1e?style=flat-square)
+
+**在线访问：<https://tuxlin123233.github.io/my-play-list/>**
+
+<p align="center">
+  <img src="docs/preview-dark.jpg" alt="深色主题桌面预览" width="100%">
+</p>
+
+## 关于
+
+这是把个人歌单做成的一个静态展示网站。原始歌单 437 条收藏，去重后得到 431 首歌；按风格重新分类，并为每首歌准备了专辑封面、时长和音乐平台入口。
+
+整个网站没有后端，也不依赖前端框架，所有数据在构建时生成，直接部署在 GitHub Pages。
+
+## 功能
+
+- 431 首歌，8 种风格分类
+- 搜索歌名、艺术家、专辑
+- 按风格筛选，按歌名 / 艺术家 / 专辑 / 时长排序
+- 网格 / 列表两种视图
+- 随机一首，打开歌曲详情
+- 深色霓虹 / 浅色两种主题，自动记住选择
+- 一键跳转 QQ 音乐 / 网易云音乐搜索
+- 手机端适配，封面懒加载
+
+## 界面预览
+
+<p align="center">
+  <img src="docs/preview-light.jpg" alt="浅色主题列表视图" width="72%">
+  <img src="docs/preview-mobile.jpg" alt="手机端预览" width="22%">
+</p>
+
+<p align="center">
+  <img src="docs/preview-dialog.jpg" alt="歌曲详情弹窗" width="72%">
+</p>
+
+## 风格分布
+
+| 风格 | 数量 |
+| --- | ---: |
+| 流行 | 222 |
+| 电子 / 舞曲 | 100 |
+| 摇滚 / 另类 | 52 |
+| 嘻哈 / R&B | 28 |
+| 原声 / ACG | 21 |
+| 纯音乐 | 4 |
+| 民谣 / 唱作 | 3 |
+| 爵士 / 蓝调 | 1 |
+
+## 技术栈
+
+- 原生 HTML / CSS / JavaScript，无框架、无构建步骤
+- 封面：酷我音乐，下载后统一转为 320×320 WebP
+- 风格 / 语言：QQ 音乐
+- 部署：GitHub Pages
+
+## 项目结构
+
+```text
+.
+├── index.html
+├── favicon.svg
+├── css/
+│   └── style.css
+├── js/
+│   ├── app.js
+│   └── data.js
+├── covers/                 # 431 张本地封面
+├── data/
+│   ├── playlist.csv        # 原始歌单
+│   ├── songs_raw.json      # QQ 音乐抓取结果
+│   ├── kuwo_songs.json     # 酷我封面 / 时长
+│   └── songs.json          # 合并后的最终数据
+├── docs/                   # README 预览图
+└── tools/
+    ├── fetch_metadata.py
+    └── build_site_data.py
+```
+
+## 本地运行
+
+```bash
+python3 -m http.server 8000
+# 打开 http://localhost:8000/
+```
+
+直接双击 `index.html` 也能打开，但建议用本地服务器。
+
+## 更新歌单
+
+1. 把新的歌单导出为 CSV，替换 `data/playlist.csv`。列名需要是：`歌曲名,艺术家,专辑名`。
+2. 抓取风格与平台信息：
+
+   ```bash
+   python3 tools/fetch_metadata.py
+   ```
+
+3. 合并数据并下载封面：
+
+   ```bash
+   python3 tools/build_site_data.py --download-covers
+   ```
+
+4. 提交并推送：
+
+   ```bash
+   git add .
+   git commit -m "更新歌单"
+   git push
+   ```
+
+## 说明
+
+- 歌单、封面和音乐元数据版权归原作者及平台所有，本项目仅作个人展示。
+- 代码以 MIT License 开源。
+
+---
+
+Made by [TuxLin123233](https://github.com/TuxLin123233)
