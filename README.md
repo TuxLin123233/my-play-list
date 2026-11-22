@@ -32,7 +32,7 @@
 - 无渐变、扁平、杂志感的编辑排版
 - 一键跳转 QQ 音乐 / 网易云音乐搜索
 - 手机端适配，封面懒加载
-- 「其它网站」入口：重力 2048、一事一练、像素画网站与 GitHub
+- 「其它网站」入口：重力 2048、一事一练、像素小镇、像素画网站与 GitHub
 
 ## 界面预览
 
@@ -62,6 +62,7 @@
 
 - [重力 2048](https://tuxlin123233.github.io/)：一个受重力影响的 2048 小游戏
 - [一事一练](https://tuxlin123233.github.io/json-prompt-form/)：AI 长期陪练与存档
+- [像素小镇](https://light-field.pages.dev)：云端像素画板：画画、存档、串门，还能投到灯板
 - [像素画网站](https://pixel-space-9bn.pages.dev/)：我的像素画作品
 - [GitHub](https://github.com/TuxLin123233)：其它开源项目
 
