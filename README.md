@@ -33,7 +33,7 @@
 - 唱片档案动效：入场、滚动淡入、NOW SPINNING 换片、弹窗与 hover，尊重系统减少动态偏好
 - 一键跳转 QQ 音乐 / 网易云音乐搜索
 - 手机端适配，封面懒加载
-- 「其它网站」入口：重力 2048、一事一练、像素小镇、像素画网站与 GitHub
+- 「其它网站」入口：重力 2048、一事一练、像素小镇、像素画网站、零食柜与 GitHub
 - 听音设备：EDIFIER AtomBuds Plus 与 W820NB 三金标版（只记日常用途，不堆参数）
 - 单曲分享链接（`?song=031`）、原生分享 / 一键复制链接
 - 1200×630 OG 分享卡片，发社交平台时有封面
@@ -74,6 +74,7 @@
 - [一事一练](https://tuxlin123233.github.io/json-prompt-form/)：AI 长期陪练与存档
 - [像素小镇](https://light-field.pages.dev)：云端像素画板：画画、存档、串门，还能投到灯板
 - [像素画网站](https://pixel-space-9bn.pages.dev/)：我的像素画作品
+- [零食柜](https://tuxlin123233.github.io/my-food-list/)：只收有包装的零食，手账风收藏
 - [GitHub](https://github.com/TuxLin123233)：其它开源项目
 
 ## 技术栈
