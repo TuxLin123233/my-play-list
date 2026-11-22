@@ -34,6 +34,7 @@
 - 一键跳转 QQ 音乐 / 网易云音乐搜索
 - 手机端适配，封面懒加载
 - 「其它网站」入口：重力 2048、一事一练、像素小镇、像素画网站与 GitHub
+- 「我的音乐设备」：EDIFIER AtomBuds Plus 与 EDIFIER W820NB 三金标版
 
 ## 界面预览
 
@@ -44,6 +45,10 @@
 
 <p align="center">
   <img src="docs/preview-dialog.jpg" alt="歌曲详情弹窗" width="72%">
+</p>
+
+<p align="center">
+  <img src="docs/preview-gear.jpg" alt="我的音乐设备：EDIFIER AtomBuds Plus 与 W820NB 三金标版" width="100%">
 </p>
 
 ## 风格分布
