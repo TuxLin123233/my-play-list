@@ -9,3 +9,6 @@ Thumbs.db
 /data/metadata_cache.json
 /metadata_cache.json
 /songs_raw.json
+
+# local screenshots for previews
+.shot/
