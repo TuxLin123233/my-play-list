@@ -47,9 +47,6 @@
   <img src="docs/preview-dialog.jpg" alt="歌曲详情弹窗" width="72%">
 </p>
 
-<p align="center">
-  <img src="docs/preview-gear.jpg" alt="我的音乐设备：EDIFIER AtomBuds Plus 与 W820NB 三金标版" width="100%">
-</p>
 
 ## 风格分布
 
